@@ -15,6 +15,18 @@
 #'
 #' @return A list with `relative_intensity`, `Ti`, `di`, and `population_S`.
 #'
+#' @details
+#' This function follows the equations for \eqn{d_i} and \eqn{S} in Freitas &
+#' Bolmgren (2008, p. 722) exactly. The paper states that \eqn{d_i} and
+#' \eqn{S} range from 0 (no synchrony) to 1 (perfect synchrony). With these
+#' equations, however, plants with identical flowering schedules only score 1
+#' if every census with flowers is at full intensity (a flat schedule) or if
+#' flowering lasts a single census. When intensity rises and falls, identical
+#' schedules score less than 1: for example, about 0.60 for counts of 1, 2, 3,
+#' 2, 1 and about 0.28 for 1, 1, 10, 1, 1. Values should therefore be compared
+#' only between populations or species with similarly shaped schedules, and
+#' should not be read as "1 = perfect synchrony" unless schedules are flat.
+#'
 #' @examples
 #' data(example_wide)
 #' freitas_bolmgren_S(example_wide, verbose = FALSE)$population_S
