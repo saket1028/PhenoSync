@@ -1,7 +1,10 @@
-#' Mahoro (2002) Rank-Order Synchrony Index
+#' Mahoro (2002) Flowering Rank Order
 #'
-#' Calculates Mahoro's rank-order synchrony index using cumulative flowering
-#' proportions and ranks across census days.
+#' Calculates Mahoro's flowering rank order (Ri; eqn 1 of Mahoro 2002) using
+#' cumulative flowering proportions and ranks across census days up to the
+#' population peak. Ri orders plants by earliness: a smaller Ri means earlier
+#' flowering. It is a ranking of plants, not a measure of synchrony, so it has
+#' no single population value.
 #'
 #' @param data A numeric matrix or data frame in wide format. Rows are census
 #'   days, columns are individuals, and values are counts of open flowers.
@@ -92,12 +95,15 @@ mahoro_Ri <- function(data, census_col = NULL, ties.method = "average", verbose 
   rownames(daily_ranks) <- rownames(flower_mat)[1:peak_day]
   
   for (j in 1:peak_day) {
-    ranks <- rank(x_mat[j, ], ties.method = ties.method, na.last = "keep")
+    # Rank 1 = largest share of flowers already opened, i.e. earliest plant
+    # (Mahoro 2002: "A smaller rank number indicates earlier blooming")
+    ranks <- rank(-x_mat[j, ], ties.method = ties.method, na.last = "keep")
     Ri_sum <- Ri_sum + ranks
     daily_ranks[j, ] <- ranks
   }
   
-  Ri <- Ri_sum / peak_day
+  # Mahoro (2002) eqn 1: Ri is the sum of daily ranks up to the peak
+  Ri <- Ri_sum
   
   if (verbose) {
     message("Mahoro Ri calculated for ", n, " individuals.")

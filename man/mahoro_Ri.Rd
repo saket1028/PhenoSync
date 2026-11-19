@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahoro_2002_ri.R
 \name{mahoro_Ri}
 \alias{mahoro_Ri}
-\title{Mahoro (2002) Rank-Order Synchrony Index}
+\title{Mahoro (2002) Flowering Rank Order}
 \usage{
 mahoro_Ri(data, census_col = NULL, ties.method = "average", verbose = TRUE)
 }
@@ -24,8 +24,11 @@ A list with \code{Ri}, \code{peak_day}, \code{daily_ranks}, and
 \code{cumulative_proportion}.
 }
 \description{
-Calculates Mahoro's rank-order synchrony index using cumulative flowering
-proportions and ranks across census days.
+Calculates Mahoro's flowering rank order (Ri; eqn 1 of Mahoro 2002) using
+cumulative flowering proportions and ranks across census days up to the
+population peak. Ri orders plants by earliness: a smaller Ri means earlier
+flowering. It is a ranking of plants, not a measure of synchrony, so it has
+no single population value.
 }
 \examples{
 data(example_wide)

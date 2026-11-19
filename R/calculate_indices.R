@@ -273,7 +273,6 @@ index_summary_from_results <- function(results, columns_are = NA_character_, bin
       freitas_bolmgren_S = res$population_S,
       koenig_rp = res$population_rp,
       mahoro_Si = mean(res, na.rm = TRUE),
-      mahoro_Ri = mean(res$Ri, na.rm = TRUE),
       marquis_SM = res$SM_population_mean,
       michalski_durka_CV = res$population_CV,
       pianka_overlap = res$population_mean,
@@ -289,9 +288,18 @@ index_summary_from_results <- function(results, columns_are = NA_character_, bin
     as.numeric(val)[1]
   }
 
+  # Indices that rank plants rather than measure synchrony have no single
+  # population value: mahoro_Ri is a rank, so its average is always (n + 1) / 2.
+  # Their full results are still returned, but they are left out of the summary.
+  no_summary <- c("mahoro_Ri")
+  summary_names <- setdiff(names(results), no_summary)
+  if (length(summary_names) == 0) {
+    return(index_summary_from_results(list()))
+  }
+
   out <- data.frame(
-    index = names(results),
-    estimate = vapply(names(results), function(nm) extract(nm, results[[nm]]), numeric(1)),
+    index = summary_names,
+    estimate = vapply(summary_names, function(nm) extract(nm, results[[nm]]), numeric(1)),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
