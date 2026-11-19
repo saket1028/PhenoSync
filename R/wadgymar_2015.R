@@ -94,13 +94,9 @@ wadgymar_Si <- function(data, census_col = NULL, verbose = TRUE) {
     x_mean <- mean(x_pos)
     CVi[i] <- ifelse(x_mean == 0, NA_real_, x_sd / x_mean)
     
-    # Paper's rearranged equation
-    Si[i] <- sqrt(SSi[i] / Ti[i]) * sqrt(Di[i] / (Di[i] - 1))
-    
-    # numerical guard
-    if (!is.na(Si[i])) {
-      Si[i] <- max(0, min(1, Si[i]))
-    }
+    # Paper's rearranged equation (Wadgymar et al. 2015, eqn 2):
+    # Si = sqrt(SSi) / Ti * sqrt(Di / (Di - 1)), equivalent to CVi / sqrt(Di)
+    Si[i] <- sqrt(SSi[i]) / Ti[i] * sqrt(Di[i] / (Di[i] - 1))
   }
   
   mean_Si <- mean(Si, na.rm = TRUE)

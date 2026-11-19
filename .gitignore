@@ -4,3 +4,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Publisher PDFs of source papers (not for redistribution)
+sandbox/source_papers/
