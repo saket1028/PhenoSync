@@ -21,10 +21,22 @@ names are preserved.}
 A named numeric vector of individual synchrony values.
 }
 \description{
-Calculates Mahoro's individual synchrony index from a wide flowering matrix.
+Calculates Mahoro's individual synchrony index from a wide flowering matrix,
+following equation 2 of Mahoro (2002):
+\deqn{S_i = \frac{1}{2}\left(2 - \sum_{j=1}^{n} |y_{i,j} - \bar{y}_{i,j}|\right)}
+where \eqn{y_{i,j}} is the share of individual \eqn{i}'s season total that
+was counted on census \eqn{j}, and \eqn{\bar{y}_{i,j}} is the mean of the
+same share across all other individuals. Si is 1 when an individual's
+schedule matches the average of the others exactly, and 0 when the two
+never overlap.
 }
 \examples{
 data(example_wide)
 mahoro_Si(example_wide, verbose = FALSE)
 
+}
+\references{
+Mahoro, S. (2002) Individual flowering schedule, fruit set, and
+flower and seed predation in \emph{Vaccinium hirtum} Thunb. (Ericaceae).
+\emph{Canadian Journal of Botany} 80: 82--92.
 }
