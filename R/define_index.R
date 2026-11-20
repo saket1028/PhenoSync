@@ -67,7 +67,7 @@ pheno_index_database <- function() {
       function_name = "mahoro_Si",
       citation = "Mahoro, S. (2002). Individual flowering schedule, fruit set, and flower and seed predation in Vaccinium hirtum Thunb. (Ericaceae). Canadian Journal of Botany, 80(1), 82–92. https://doi.org/10.1139/b01-136",
       aspect = "Similarity between each individual's proportional flowering schedule and the rest of the population.",
-      formula = "S_i = sum_t sqrt(y_i,t * y_bar_-i,t), where y_i,t is proportional seasonal flowering.",
+      formula = "S_i = (1/2) * (2 - sum_t |y_i,t - y_bar_-i,t|), where y_i,t is proportional seasonal flowering (Mahoro 2002, eqn 2).",
       input = "Wide numeric matrix/data frame; rows = census days; columns = individuals.",
       output = "Named numeric vector of individual Si values.",
       range = "0 to 1. Higher values indicate greater synchrony."

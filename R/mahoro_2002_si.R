@@ -1,6 +1,17 @@
 #' Mahoro (2002) Flowering Synchrony Index
 #'
-#' Calculates Mahoro's individual synchrony index from a wide flowering matrix.
+#' Calculates Mahoro's individual synchrony index from a wide flowering matrix,
+#' following equation 2 of Mahoro (2002):
+#' \deqn{S_i = \frac{1}{2}\left(2 - \sum_{j=1}^{n} |y_{i,j} - \bar{y}_{i,j}|\right)}
+#' where \eqn{y_{i,j}} is the share of individual \eqn{i}'s season total that
+#' was counted on census \eqn{j}, and \eqn{\bar{y}_{i,j}} is the mean of the
+#' same share across all other individuals. Si is 1 when an individual's
+#' schedule matches the average of the others exactly, and 0 when the two
+#' never overlap.
+#'
+#' @references Mahoro, S. (2002) Individual flowering schedule, fruit set, and
+#'   flower and seed predation in \emph{Vaccinium hirtum} Thunb. (Ericaceae).
+#'   \emph{Canadian Journal of Botany} 80: 82--92.
 #'
 #' @param data A numeric matrix or data frame in wide format. Rows are census
 #'   days, columns are individuals, and values are counts of open flowers.
@@ -82,8 +93,8 @@ mahoro_Si <- function(data, census_col = NULL, verbose = TRUE) {
     # mean proportional schedule of all other flowering individuals
     y_bar_minus_i <- rowMeans(y_mat[, valid_others, drop = FALSE], na.rm = TRUE)
     
-    # Bhattacharyya-type similarity
-    Si[i] <- sum(sqrt(y_mat[, i] * y_bar_minus_i), na.rm = TRUE)
+    # Mahoro (2002) eqn 2: Si = (1/2) * (2 - sum_j |y_ij - y_bar_ij|)
+    Si[i] <- 0.5 * (2 - sum(abs(y_mat[, i] - y_bar_minus_i), na.rm = TRUE))
   }
   
   if (verbose) {
