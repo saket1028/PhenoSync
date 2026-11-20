@@ -7,40 +7,71 @@
 poole_rathcke(
   data,
   census_col = NULL,
+  census_days = NULL,
+  season_start = NULL,
+  season_end = NULL,
   season_length = NULL,
   perform_test = TRUE,
   verbose = TRUE
 )
 }
 \arguments{
-\item{data}{A numeric matrix or data frame in wide format. Rows are census
-days, columns are species, and values are counts of open flowers.}
+\item{data}{A numeric matrix or data frame in wide format. Rows are
+censuses, columns are species, and values are counts of open flowers.}
 
 \item{census_col}{Optional column name or column index containing census
 names/dates in wide-format data. When supplied, this column is removed
 from the phenology matrix and used as row names. If \code{NULL}, existing row
 names are preserved.}
 
-\item{season_length}{Numeric season length used to normalize peak dates. If
-\code{NULL}, the number of rows in \code{data} is used.}
+\item{census_days}{Numeric or \code{Date} vector giving the date of each census
+(one value per row of \code{data}, in increasing order), for example day of
+year. If \code{NULL}, censuses are assumed to be on consecutive days
+(1, 2, 3, ...).}
 
-\item{perform_test}{Logical. If \code{TRUE}, calculates an approximate chi-square
-style test.}
+\item{season_start, season_end}{Start and end of the growing season, on the
+same scale as \code{census_days}. Default to the first and last census.}
+
+\item{season_length}{Kept for compatibility with earlier versions. If
+supplied, \code{season_end} is set to \code{season_start + season_length}. Cannot be
+used together with \code{season_end}.}
+
+\item{perform_test}{Logical. If \code{TRUE}, calculates the approximate
+chi-square test given by Poole and Rathcke (1979).}
 
 \item{verbose}{Logical. If \code{TRUE}, prints summary messages.}
 }
 \value{
-A list with peak dates, ordered peaks, interval distances, observed
-and expected spacing variance, ratio, optional test statistics, and an
-interpretation.
+A list with peak dates (on the \code{census_days} scale), ordered peaks,
+gaps between peaks, observed and expected spacing variance, ratio,
+optional test statistics, the season used, and an interpretation.
 }
 \description{
 Extracts species peak flowering dates from a wide matrix and evaluates
 whether peak dates are regularly spaced, aggregated, or approximately random
 across the flowering season.
 }
+\details{
+Poole and Rathcke (1979) treat time as continuous: each peak date is placed
+on an axis running from the start to the end of the growing season, and the
+gaps between neighbouring peaks (plus the gaps from the season start to the
+first peak and from the last peak to the season end) are measured as a
+fraction of the season. The index therefore needs real census dates. If
+\code{census_days} is not supplied, censuses are assumed to be one day apart with
+no gaps, which will give misleading results for weekly or uneven censuses.
+}
 \examples{
 data(example_wide)
 poole_rathcke(example_wide, verbose = FALSE)$ratio
 
+# Weekly censuses recorded as day of year
+m <- matrix(0, nrow = 6, ncol = 3)
+m[cbind(c(2, 3, 5), 1:3)] <- 5
+poole_rathcke(m, census_days = c(120, 127, 134, 141, 148, 155),
+              verbose = FALSE)$ratio
+
+}
+\references{
+Poole, R. W., & Rathcke, B. J. (1979). Regularity, randomness,
+and aggregation in flowering phenologies. Science, 203, 470-471.
 }
